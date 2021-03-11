@@ -32,7 +32,7 @@ function submit() {
     fetch("/signup/upload", {
         method: "POST",
         body: JSON.stringify({
-            id: id,
+            username: id,
             password: password
         })
     })
