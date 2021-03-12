@@ -7,10 +7,12 @@ These services are required.
  <li>Python</li>
 </ul>
 After installing those services, enter this on your workspace.
+
 ```
 pip install flask
 git clone https://github.com/xibotlab/logg.git
 ```
+
 This command will install Flask, and clone direcotry.
 Go to the cloned directory and run app.py.
 
