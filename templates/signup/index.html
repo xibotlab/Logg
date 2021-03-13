@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,14 +12,24 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='signup/style.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.png') }}">
 </head>
+
 <body>
     <div id="root"></div>
+    <div id="email" hidden>
+        <p style="margin: 1.5vh 0px;">
+            이메일로 인증번호가 발송되었습니다.<br>
+            인증번호를 입력하여 가입을 마칩니다.
+        </p>
+        <input type="number" placeholder="인증번호 입력" id="verify">
+        <button onclick="submit()">인증하기</button>
+    </div>
 </body>
+
 <!--packages-->
 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
 <!--JS-->
+<script src="{{ url_for('static', filename='signup/event.js') }}"></script>
 <script type="text/babel" src="{{ url_for('static', filename='signup/layout.jsx') }}"></script>
-<script type="text/babel" src="{{ url_for('static', filename='signup/event.js') }}"></script>
 </html>

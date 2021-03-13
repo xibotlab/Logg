@@ -21,7 +21,7 @@ button {
     border-radius: 5px;
 
 }
-h1 {
+h1, p {
     font-weight: 500;
     margin: 0;
 }
@@ -34,4 +34,11 @@ input, textarea, button {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+}
+#email {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
 }
