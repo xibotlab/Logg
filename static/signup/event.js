@@ -67,11 +67,11 @@ function submit() {
     })
     .then(res => res.json())
     .then(data => {
-        if (data.status == 405) {
-            alert("인증번호가 올바르지 않습니다.")
+        if (data.status == 403) {
+            alert("인증번호가 올바르지 않습니다.\n다시 확인해주세요.")
         } else {
             alert("회원가입에 성공하였습니다.\n로그인해주세요.")
-            //location.href = "login"  
+            location.href = "login"  
         }
     })
 }
