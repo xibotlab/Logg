@@ -59,13 +59,20 @@ def signup_upload():
     key = data["key"]
     verify = data["verify"]
 
-    #인증번호 체크
+    #DB 로그인
     conn = pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("use logg2;")
+
+    #인증번호 체크
     cursor.execute("SELECT * FROM verify WHERE idx='{key}';".format(key=key))
     if not str(cursor.fetchall()[0]["value"]) == str(verify):
-        return {"status": 403}
+        return "verifyerror"
+
+    #이미 존재하는 이메일인지 체크
+    cursor.execute("SELECT email FROM account WHERE email='{email}';".format(email=email.replace(" ", "")))
+    if len(cursor.fetchall()) > 0:
+        return "emailerror"
     
     #load db password
     dbpw = hidden["db"]["pw"]
@@ -81,7 +88,7 @@ def signup_upload():
     conn.commit()
     conn.close()
 
-    return {"status": 200}
+    return "success"
 
 #etc
 @app.route("/email")

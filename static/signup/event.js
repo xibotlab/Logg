@@ -65,10 +65,15 @@ function submit() {
             verify: verify
         })
     })
-    .then(res => res.json())
-    .then(data => {
-        if (data.status == 403) {
+    .then(res => res.text())
+    .then(result => {
+        const data = result.trim()
+        
+        if (data == "verifyerror") {
             alert("인증번호가 올바르지 않습니다.\n다시 확인해주세요.")
+        } else if (data == "emailerror") {
+            alert("이미 존재하는 이메일입니다.\n다른 이메일로 다시 시도해주세요.")
+            location.reload()
         } else {
             alert("회원가입에 성공하였습니다.\n로그인해주세요.")
             location.href = "login"  
