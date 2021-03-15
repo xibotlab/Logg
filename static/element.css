@@ -1,14 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap'); /* noto sans serif */
 * {
     margin: 0;
+    outline: 0;
+    font-family: 'Arial', 'Noto Sans KR';
 }
 
 body {
-    background-color: #f0f0f0;
-}
-.div {
     background-color: white;
-    box-shadow: 0px 0px 20px #ebebeb;
-    border-radius: 20px;
-    padding: 15px;
-    width: 250px;
+}
+
+input {
+    background-color: white;
+    padding: 11px;
+    
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+
+    transition: 0.5s;
+
+    margin: 3px;
+
+    width: 200px;
+}
+input:focus {
+    border: 1px solid #4da6ff;
+}
+
+button {
+    background-color: #4592ff;
+    color: white;
+
+    border: none;
+    border-radius: 10000px;
+
+    padding: 10px 23px;
 }
