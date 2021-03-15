@@ -5,9 +5,41 @@ from email.mime.multipart import MIMEMultipart
 
 app = Flask(__name__)
 
-#hidden 불러오기
+#get hidden.js
 with open("hidden.json", "r") as f:
     hidden = json.loads(f.read())
+
+#connect to DB
+conn = pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
+cursor = conn.cursor(pymysql.cursors.DictCursor)
+cursor.execute("USE logg2;")
+
+#login
+@app.route("/login")
+def login():
+    return render_template("login/index.html")
+
+@app.route("/login/api", methods=["POST"])
+def login_api():
+    #get body
+    data = json.loads(request.data.decode())
+    email = data["email"].replace(" ", "")
+    pw = data["pw"]
+
+    #select!
+    cursor.execute("SELECT email, password FROM account WHERE email='{email}';".format(email=email))
+    account = cursor.fetchall()
+
+    #check if email exists
+    if len(account) == 0:
+        return {"status": 404}
+    
+    #password
+    if account[0]["password"] == pw:
+        return {"status": 200}
+    else:
+        #wrong password
+        return {"status": 403}
 
 #signup
 @app.route("/signup")
@@ -24,9 +56,6 @@ def signup_verify():
     verify = random.randint(1000, 9999)
 
     #key의 value를 DB에 저장
-    conn = pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
-    cursor = conn.cursor()
-    cursor.execute("USE logg2;")
     cursor.execute("INSERT INTO verify (idx, value) VALUES ('{key}', {value})".format(key=key, value=verify))
     conn.commit()
     conn.close()
@@ -76,11 +105,6 @@ def signup_upload():
     
     #load db password
     dbpw = hidden["db"]["pw"]
-
-    #connect to db
-    conn = pymysql.connect(host="localhost", user="root", password=dbpw)
-    cursor = conn.cursor()
-    cursor.execute("USE logg2;")
 
     #insert into db
     cursor.execute('INSERT INTO account (username, password, created, description, img, email) VALUES ("{username}", "{password}", NOW(), "false", "false", "{email}")'.format(username=username, password=password, email=email))
