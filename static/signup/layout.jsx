@@ -2,8 +2,8 @@ class Index extends React.Component {
     render() {
         return (
             <div style={{textAlign: "center"}} id={"div" + this.props.idname} hidden>
-                <h1 style={{fontSize: "2rem", marginBottom: "1.5vh"}}>{this.props.title}</h1>
-                <input type="text" placeholder={this.props.placeholder} style={{marginBottom: "1vh"}} id={"input" + this.props.idname} type={this.props.type} /><br />
+                <h1 style={{fontSize: "2rem", marginBottom: "1vh"}}>{this.props.title}</h1>
+                <input type="text" placeholder={this.props.placeholder} style={{marginBottom: "1vh", width: "230px"}} id={"input" + this.props.idname} type={this.props.type} /><br />
                 <button id={this.props.idname} onClick={() => {next(this.props.idname)}}>확인</button>
             </div>
         )

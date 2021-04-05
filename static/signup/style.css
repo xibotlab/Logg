@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
 /* 기본 설정 */
 body {
     margin: 0;
 }
 * {
-    font-family: 'Arial', 'NanumSquare';
+    font-family: 'Arial', 'Noto Sans KR';
 }
 input {
     font-size: 1.1rem;
@@ -11,16 +13,7 @@ input {
     padding-bottom: 7px;
     border-bottom: 1px solid #dbdbdb;
 }
-button {
-    background-color: #4f92ff;
-    color: white;
-    padding: 10px 25px;
-    font-size: 1rem;
 
-    border: none;
-    border-radius: 5px;
-
-}
 h1, p {
     font-weight: 500;
     margin: 0;
