@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 import pymysql, json, smtplib, random
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -9,10 +9,11 @@ app = Flask(__name__)
 with open("hidden.json", "r") as f:
     hidden = json.loads(f.read())
 
+app.secret_key = hidden["app"]["key"]
+
 #connect to DB
-conn = pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
-cursor = conn.cursor(pymysql.cursors.DictCursor)
-cursor.execute("USE logg2;")
+def connectDb():
+    return pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
 
 #login
 @app.route("/login")
@@ -42,30 +43,27 @@ def login_api():
         return {"status": 403}
 
 #signup
-@app.route("/signup")
+@app.route("/signup/")
 def signup():
     return render_template("signup/index.html")
 
-@app.route("/signup/verify", methods=["GET", "POST"])
+@app.route("/signup/verify/", methods=["GET", "POST"])
 def signup_verify():
     #get query string
     data = json.loads(request.data.decode())
     adress = data["adress"]
     nickname = data["nickname"]
-    key = data["key"]
     verify = random.randint(1000, 9999)
 
-    #key의 value를 DB에 저장
-    cursor.execute("INSERT INTO verify (idx, value) VALUES ('{key}', {value})".format(key=key, value=verify))
-    conn.commit()
-    conn.close()
+    #세션에 인증번호를 저장
+    session["verify"] = verify
 
-    #login
+    #SMTP 이메일 로그인
     s = smtplib.SMTP('smtp.gmail.com', 587)
     s.starttls()
     s.login("xibotlab@gmail.com", hidden["email"]["pw"])
 
-    #send
+    #인증 메일 전송하기
     msg = MIMEMultipart("alternative")
     msg["subject"] = "[Logg] 인증번호 발송"
     msg['From'] = 'xibotlab@gmail.com'
@@ -78,7 +76,7 @@ def signup_verify():
 
     return {"status": 200}
 
-@app.route("/signup/upload", methods=["POST"])
+@app.route("/signup/upload/", methods=["POST"])
 def signup_upload():
     #get post information
     data = json.loads(request.data.decode())
@@ -89,14 +87,16 @@ def signup_upload():
     verify = data["verify"]
 
     #DB 로그인
-    conn = pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
+    conn = connectDb()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("use logg2;")
 
     #인증번호 체크
-    cursor.execute("SELECT * FROM verify WHERE idx='{key}';".format(key=key))
-    if not str(cursor.fetchall()[0]["value"]) == str(verify):
-        return "verifyerror"
+    # cursor.execute("SELECT * FROM verify WHERE idx='{key}';".format(key=key))
+    # if not str(cursor.fetchall()[0]["value"]) == str(verify):
+    #     return "verifyerror"
+    if not str(session["verify"]) == (verify):
+        return "verifyerror" 
 
     #이미 존재하는 이메일인지 체크
     cursor.execute("SELECT email FROM account WHERE email='{email}';".format(email=email.replace(" ", "")))
@@ -107,7 +107,7 @@ def signup_upload():
     dbpw = hidden["db"]["pw"]
 
     #insert into db
-    cursor.execute('INSERT INTO account (username, password, created, description, img, email) VALUES ("{username}", "{password}", NOW(), "false", "false", "{email}")'.format(username=username, password=password, email=email))
+    cursor.execute('INSERT INTO account (username, password, created, description, email) VALUES ("{username}", "{password}", NOW(), "false", "{email}")'.format(username=username, password=password, email=email))
 
     conn.commit()
     conn.close()
