@@ -12,9 +12,9 @@ class Index extends React.Component {
 
 ReactDOM.render(
     <div>
-        <Index title="이메일" placeholder="이메일 입력..." idname="1" type="email" />
+        <Index title="이메일" placeholder="아이디로 사용됩니다." idname="1" type="email" />
         <Index title="닉네임" placeholder="실명은 입력하지 마세요." idname="2" type="email" />
-        <Index title="비밀번호" placeholder="비밀번호..." idname="3" type="password" />
+        <Index title="비밀번호" placeholder="남들에게 알려주지 마세요." idname="3" type="password" />
         <Index title="비밀번호" placeholder="다시 비밀번호를 입력하세요..." idname="4" type="password" />
     </div>
 , document.getElementById("root"))

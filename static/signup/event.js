@@ -3,6 +3,7 @@ const key = String(Math.random()).substring(2, 11);
 //next
 function next(id) {
     if (id == 4) {
+        //이메일 인증
         const adress = document.getElementById(`input1`).value;
         const nickname = document.getElementById("input2").value;
         const pw = document.getElementById("input3").value;
@@ -14,7 +15,7 @@ function next(id) {
             document.getElementById("email").hidden = false;
 
             //인증번호 발송
-            fetch("/signup/verify", {
+            fetch("/signup/verify/", {
                 method: "POST",
                 body: JSON.stringify({
                     adress: adress,
@@ -25,13 +26,13 @@ function next(id) {
         } else {
             alert("다시 입력한 비밀번호가 지정한 비밀번호와 같지 않습니다.\n비밀번호를 다시 확인해주세요.")
         }
-    } else if (id < 4) {
+    } else if (id < 4 && document.getElementById(`input${id}`).value.trim() !== "") {
+        //페이지 넘어가기
         document.getElementById("div" + id).hidden = true;
         document.getElementById("div" + String(Number(id) + 1)).hidden = false;
     }
 }
 
-//submit event function
 function checkBlank(value) {
     if (value.trim().length == 0) {
         return true;
@@ -41,6 +42,7 @@ function checkBlank(value) {
     }
 }
 
+//가입하기
 function submit() {
     //variables
     const email = document.getElementById("input1").value
@@ -55,7 +57,7 @@ function submit() {
         return false;
     }
     
-    fetch("/signup/upload", {
+    fetch("/signup/upload/", {
         method: "POST",
         body: JSON.stringify({
             email: email,
@@ -75,8 +77,8 @@ function submit() {
             alert("이미 존재하는 이메일입니다.\n다른 이메일로 다시 시도해주세요.")
             location.reload()
         } else {
-            alert("회원가입에 성공하였습니다.\n로그인해주세요.")
-            location.href = "login"  
+            // alert("회원가입에 성공하였습니다.\n로그인해주세요.")
+            // location.href = "login"  
         }
     })
 }
