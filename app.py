@@ -2,25 +2,44 @@ from flask import Flask, render_template, request, session
 import pymysql, json, smtplib, random
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from flask_bcrypt import Bcrypt
 
-app = Flask(__name__)
-
+## default settings ##
 #get hidden.js
 with open("hidden.json", "r") as f:
     hidden = json.loads(f.read())
-
-app.secret_key = hidden["app"]["key"]
 
 #connect to DB
 def connectDb():
     return pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
 
+## set app ##
+app = Flask(__name__)
+app.secret_key = hidden["app"]["key"]
+app.config['BCRYPT_LEVEL'] = 5
+
+bcrypt = Bcrypt(app)
+
+# pwhash = key.generate_password_hash("hunter2")
+# print(pwhash)
+# print(key.check_password_hash(pwhash, "hunter2"))
+
+
+## pages ##
 #login
 @app.route("/login")
 def login():
     return render_template("login/index.html")
 
-@app.route("/login/api", methods=["POST"])
+#signup
+@app.route("/signup/")
+def signup():
+    return render_template("signup/index.html")
+
+
+## api ##
+#login
+@app.route("/api/login/", methods=["POST"])
 def login_api():
     #get body
     data = json.loads(request.data.decode())
@@ -42,12 +61,8 @@ def login_api():
         #wrong password
         return {"status": 403}
 
-#signup
-@app.route("/signup/")
-def signup():
-    return render_template("signup/index.html")
-
-@app.route("/signup/verify/", methods=["GET", "POST"])
+#이메일 인증
+@app.route("/api/signup/verify/", methods=["GET", "POST"])
 def signup_verify():
     #get query string
     data = json.loads(request.data.decode())
@@ -76,14 +91,13 @@ def signup_verify():
 
     return {"status": 200}
 
-@app.route("/signup/upload/", methods=["POST"])
+@app.route("/api/signup/", methods=["POST"])
 def signup_upload():
     #get post information
     data = json.loads(request.data.decode())
     username = data["username"]
-    password = data["password"]
+    password = bcrypt.generate_password_hash(data["password"])
     email = data["email"]
-    key = data["key"]
     verify = data["verify"]
 
     #DB 로그인
@@ -92,9 +106,6 @@ def signup_upload():
     cursor.execute("use logg2;")
 
     #인증번호 체크
-    # cursor.execute("SELECT * FROM verify WHERE idx='{key}';".format(key=key))
-    # if not str(cursor.fetchall()[0]["value"]) == str(verify):
-    #     return "verifyerror"
     if not str(session["verify"]) == (verify):
         return "verifyerror" 
 
@@ -107,17 +118,12 @@ def signup_upload():
     dbpw = hidden["db"]["pw"]
 
     #insert into db
-    cursor.execute('INSERT INTO account (username, password, created, description, email) VALUES ("{username}", "{password}", NOW(), "false", "{email}")'.format(username=username, password=password, email=email))
+    cursor.execute('INSERT INTO account (username, password, created, description, email) VALUES ("{username}", "{password}", NOW(), "false", "{email}")'.format(username=username, password=str(password), email=email))
 
     conn.commit()
     conn.close()
 
     return "success"
-
-#etc
-@app.route("/email")
-def email():
-    return render_template("email/index.html", username="helloworld", code="111111")
 
 #debug mode
 if __name__ == "__main__":
