@@ -1,13 +1,11 @@
-const key = String(Math.random()).substring(2, 11);
-
 //next
 function next(id) {
-    if (id == 4) {
+    if (id == 3) {
         //이메일 인증
-        const adress = document.getElementById(`input1`).value;
-        const nickname = document.getElementById("input2").value;
-        const pw = document.getElementById("input3").value;
-        const pwagain = document.getElementById("input4").value;
+        const adress = document.getElementById(`input0`).value;
+        const nickname = document.getElementById("input1").value;
+        const pw = document.getElementById("input2").value;
+        const pwagain = document.getElementById("input3").value;
 
         if (pw == pwagain) {
             //DOM 관리
@@ -15,12 +13,11 @@ function next(id) {
             document.getElementById("email").hidden = false;
 
             //인증번호 발송
-            fetch("/signup/verify/", {
+            fetch("/api/signup/verify/", {
                 method: "POST",
                 body: JSON.stringify({
                     adress: adress,
-                    nickname: nickname,
-                    key: key
+                    nickname: nickname
                 })
             })
         } else {
@@ -45,9 +42,9 @@ function checkBlank(value) {
 //가입하기
 function submit() {
     //variables
-    const email = document.getElementById("input1").value
-    const nickname = document.getElementById("input2").value
-    const pw = document.getElementById("input3").value
+    const email = document.getElementById("input0").value
+    const nickname = document.getElementById("input1").value
+    const pw = document.getElementById("input2").value
     const verify = document.getElementById("verify").value
 
     //이상 감지
@@ -57,13 +54,12 @@ function submit() {
         return false;
     }
     
-    fetch("/signup/upload/", {
+    fetch("/api/signup/", {
         method: "POST",
         body: JSON.stringify({
             email: email,
             password: pw,
             username: nickname,
-            key: key,
             verify: verify
         })
     })
@@ -77,8 +73,8 @@ function submit() {
             alert("이미 존재하는 이메일입니다.\n다른 이메일로 다시 시도해주세요.")
             location.reload()
         } else {
-            // alert("회원가입에 성공하였습니다.\n로그인해주세요.")
-            // location.href = "login"  
+            // alert("회원가입에 성공하였습니다.\n로그인해주세요.");
+            // location.href = "login";
         }
     })
 }
