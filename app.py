@@ -96,7 +96,7 @@ def signup_upload():
     #get post information
     data = json.loads(request.data.decode())
     username = data["username"]
-    password = bcrypt.generate_password_hash(data["password"])
+    password = bcrypt.generate_password_hash(data["password"]).decode("utf-8")
     email = data["email"]
     verify = data["verify"]
 
@@ -118,7 +118,7 @@ def signup_upload():
     dbpw = hidden["db"]["pw"]
 
     #insert into db
-    cursor.execute('INSERT INTO account (username, password, created, description, email) VALUES ("{username}", "{password}", NOW(), "false", "{email}")'.format(username=username, password=str(password), email=email))
+    cursor.execute('INSERT INTO account (username, password, created, description, email) VALUES ("{username}", "{password}", NOW(), "false", "{email}")'.format(username=username, password=password, email=email))
 
     conn.commit()
     conn.close()
