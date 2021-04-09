@@ -5,7 +5,7 @@ function login() {
     const pw = document.getElementById("pw").value.trim();
 
     //send a request
-    fetch("/login/api", {
+    fetch("/api/login/", {
         method: "POST",
         body: JSON.stringify({
             email: email,
