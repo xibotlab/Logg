@@ -1,0 +1,27 @@
+(% extends '/banner.html' %)
+
+(% block content %)
+<head>
+    <title>Logg 프로젝트 만들기</title>
+    <link rel="stylesheet" href="(( url_for('static', filename='/newproject/style.css') ))">
+</head>
+<body>
+    <article>
+        <h1>신규 프로젝트</h1>
+        <div>
+            <input type="text" placeholder="프로젝트 이름을 입력해주세요."><br>
+            <textarea placeholder="간략한 프로젝트 설명을 입력해주세요." rows=2></textarea>
+        </div>
+
+        <form>
+            <input type="radio" value="공개" name="public" checked>공개 <br>
+            <input type="radio" value="비공개" name="public">비공개 <br>
+        </form><br>
+
+        <p id="reco">간지나는 프로젝트명으로 {{value}}은 어떨까요?</p>
+
+        <button>확인</button>
+    </article>
+</body>
+<script src="(( url_for('static', filename='/newproject/index.js') ))"></script>
+(% endblock %)
