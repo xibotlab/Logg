@@ -9,17 +9,28 @@ body {
     background-color: white;
 }
 
-input {
+p {
+    font-size: 0.9rem;
+}
+
+/* inputs */
+input, textarea {
     background-color: white;
-    padding: 12px;
     
     border: 1px solid #d9d9d9;
-    border-radius: 3px;
 
     margin: 3px;
-
-    width: 200px;
 }
+input {
+    border-radius: 10000px;
+    padding: 12px 15px;
+}
+textarea {
+    border-radius: 17px;
+    padding: 14px;
+    resize: none;
+}
+
 button {
     background-color: #4f92ff;
     color: white;
@@ -28,18 +39,8 @@ button {
 
     border: none;
     border-radius: 5px;
-
-}
-input:focus {
-    border: 1px solid #4da6ff;
 }
 
-button {
-    background-color: #4592ff;
-    color: white;
-
-    border: none;
-    border-radius: 10000px;
-
-    padding: 10px 23px;
+input, button, select {
+    outline: 0;
 }
