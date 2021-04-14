@@ -4,6 +4,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from flask_bcrypt import Bcrypt
 
+
 ## default settings ##
 #get hidden.js
 with open("hidden.json", "r") as f:
@@ -14,15 +15,23 @@ def connectDb():
     return pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
 
 ## set app ##
-app = Flask(__name__)
+#vuejs와 jinja 충돌 방지
+class MyFlask(Flask):
+    jinja_options = Flask.jinja_options.copy()
+    jinja_options.update(dict(
+        block_start_string='(%',
+        block_end_string='%)',
+        variable_start_string='((',
+        variable_end_string='))',
+        comment_start_string='(#',
+        comment_end_string='#)',
+    ))
+
+app = MyFlask(__name__)
 app.secret_key = hidden["app"]["key"]
 app.config['BCRYPT_LEVEL'] = 5
 
 bcrypt = Bcrypt(app)
-
-# pwhash = key.generate_password_hash("hunter2")
-# print(pwhash)
-# print(key.check_password_hash(pwhash, "hunter2"))
 
 
 ## pages ##
@@ -58,7 +67,7 @@ def login_api():
     #check if email exists
     if len(account) == 0:
         return {"status": 404}
-    
+
     #password
     if bcrypt.check_password_hash(account[0]["password"], pw):
         return {"status": 200}
@@ -114,13 +123,13 @@ def signup_upload():
 
     #인증번호 체크
     if not str(session["verify"]) == (verify):
-        return "verifyerror" 
+        return "verifyerror"
 
     #이미 존재하는 이메일인지 체크
     cursor.execute("SELECT email FROM account WHERE email='{email}';".format(email=email.replace(" ", "")))
     if len(cursor.fetchall()) > 0:
         return "emailerror"
-    
+
     #load db password
     dbpw = hidden["db"]["pw"]
 
@@ -131,6 +140,11 @@ def signup_upload():
     conn.close()
 
     return "success"
+
+#create_project
+@app.route("/newproject/")
+def newproject():
+    return render_template("/newproject/index.html")
 
 #debug mode
 if __name__ == "__main__":
