@@ -16,10 +16,14 @@ p {
 /* inputs */
 input, textarea {
     background-color: white;
-    
     border: 1px solid #d9d9d9;
 
     margin: 3px;
+
+    transition: 0.5s;
+}
+input:hover, textarea:hover {
+    border: 1px solid #16D8A3;
 }
 input {
     border-radius: 10000px;
@@ -32,13 +36,18 @@ textarea {
 }
 
 button {
-    background-color: #4f92ff;
+    background-color: #16D8A3;
     color: white;
-    padding: 9px 27px;
+    padding: 12px 35px;
     font-size: 0.9rem;
 
     border: none;
-    border-radius: 5px;
+    border-radius: 100000px;
+
+    transition: 0.3s;
+}
+button:hover {
+    background-color: #13c293;
 }
 
 input, button, select {
