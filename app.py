@@ -1,7 +1,11 @@
+## 모듈 불러오기 ##
+#flask
 from flask import Flask, render_template, request, session
 import pymysql, json, smtplib, random
+#이메일
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+#암호화
 from flask_bcrypt import Bcrypt
 
 
@@ -45,11 +49,16 @@ def login():
 def signup():
     return render_template("signup/index.html")
 
+#create_project
+@app.route("/new/")
+def newproject():
+    return render_template("/newproject/index.html")
+
 
 ## api ##
 #login
 @app.route("/api/login/", methods=["POST"])
-def login_api():
+def api_login():
     #get body
     data = json.loads(request.data.decode())
     email = data["email"].replace(" ", "")
@@ -61,7 +70,7 @@ def login_api():
     cursor.execute("USE logg2;")
 
     #select!
-    cursor.execute("SELECT email, password FROM account WHERE email='{email}';".format(email=email))
+    cursor.execute("SELECT idx, email, password FROM account WHERE email='{email}';".format(email=email))
     account = cursor.fetchall()
 
     #check if email exists
@@ -70,7 +79,9 @@ def login_api():
 
     #password
     if bcrypt.check_password_hash(account[0]["password"], pw):
+        session["loggUserId"] = int(account[0]["idx"])
         return {"status": 200}
+
     else:
         #wrong password
         return {"status": 403}
@@ -108,7 +119,7 @@ def signup_verify():
     return {"status": 200}
 
 @app.route("/api/signup/", methods=["POST"])
-def signup_upload():
+def api_signup():
     #get post information
     data = json.loads(request.data.decode())
     username = data["username"]
@@ -141,10 +152,39 @@ def signup_upload():
 
     return "success"
 
-#create_project
-@app.route("/newproject/")
-def newproject():
-    return render_template("/newproject/index.html")
+@app.route("/api/new/", methods=["POST"])
+def api_new():
+    #POST body 가져오기
+    body = json.loads(request.data)
+    name = body["name"]
+    desc = body["desc"]
+
+    #DB 접속
+    conn = connectDb()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute("USE logg2;")
+
+    #project 테이블에 insert
+    cursor.execute("insert into project (name, description) values ('{name}', '{desc}');".format(name=name, desc=desc))
+
+    #생성한 project의 아이디 확인하기
+    cursor.execute("select last_insert_id() from project;")
+    idx = int(cursor.fetchall()[0]["last_insert_id()"])
+    cursor.execute("insert into project_people (userid, projectid, owner) values ({userid}, {projectid}, 1);".format(userid=session["loggUserId"], projectid=idx))
+
+    conn.commit()
+    conn.close()
+
+    return {"status": 200}
+
+## 기타 ##
+@app.route("/template/")
+def template():
+    return render_template("template.html")
+
+@app.route("/session/login/")
+def session_login():
+    return str(session["loggUserId"])
 
 #debug mode
 if __name__ == "__main__":
