@@ -37,6 +37,9 @@ create table verify (idx varchar(10) not null, value int(11) not null);
 ```
 create table project (idx int(11) not null auto_increment, name varchar(50) not null, description varchar(100) not null, public boolean not null default true, primary key(idx));
 ```
+```
+create table project_people (idx int(11) not null auto_increment, userid int(11) not null, projectid int(11) not null, owner boolean not null default 0, primary key(idx));
+```
 
 Create `hidden.json` in cloned directory, than set this information:
 ```
