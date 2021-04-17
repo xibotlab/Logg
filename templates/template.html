@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css"> <!--나눔스퀘어-->
+    <link rel="shortcut icon" href="(( url_for('static', filename='img/logo.png') ))">
+    <link rel="stylesheet" href="(( url_for('static', filename='/element.css') ))">
+
+    <style>
+        * {
+            font-family: 'NanumSquare', sans-serif;
+        }
+
+        /* 팝업 */
+        #popblack {
+            background-color: black;
+            opacity: 0.5;
+
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+
+            width: 100%;
+            height: 100%;
+        }
+        #popal {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+
+            width: 270px;
+            border-radius: 20px;
+
+            background-color: white;
+
+            text-align: center;
+
+            padding: 6vh;
+        }
+        #popvalue {
+            font-size: 1rem;
+        }
+    </style>
+
+    <script src="(( url_for('static', filename='api.js') ))"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> <!--vue.js-->
+</head>
+<body>
+    (% block content %)(% endblock %)
+
+    <!--팝업창-->
+    <div id="pop" hidden>
+        <div id="popblack"></div>
+        <div id="popal">
+            <p id="popvalue">
+                팝업 내용이 이곳에 표시됩니다.<br>
+                Hello World! 안녕!
+            </p>
+            <button style="margin-top: 1.5vh;" onclick="popup.close()"><strong>확인</strong></button>
+        </div>
+    </div>
+</body>
+</html>
