@@ -8,3 +8,7 @@ article {
 input, textarea {
     width: 250px;
 }
+
+#submit {
+    margin-top: 0.5vh;
+}
