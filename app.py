@@ -154,10 +154,12 @@ def api_signup():
 
 @app.route("/api/new/", methods=["POST"])
 def api_new():
-    #POST body 가져오기
+    #기본 변수 지정
     body = json.loads(request.data)
     name = body["name"]
     desc = body["desc"]
+    try: userid = session["loggUserId"]
+    except: return {"status": 403}, 403
 
     #DB 접속
     conn = connectDb()
