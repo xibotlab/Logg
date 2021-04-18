@@ -20,8 +20,12 @@ function next(id) {
                     nickname: nickname
                 })
             })
+            .then(res => res.json())
+            .then(data => {
+                popup.open("이메일로 인증번호가 발송되었습니다.<br>인증번호를 입력해주세요.")
+            })
         } else {
-            alert("다시 입력한 비밀번호가 지정한 비밀번호와 같지 않습니다.\n비밀번호를 다시 확인해주세요.")
+            popup.open("다시 입력한 비밀번호가 올바르지 않습니다.<br>다시 확인해주세요.")
         }
     } else if (id < 4 && document.getElementById(`input${id}`).value.trim() !== "") {
         //페이지 넘어가기
@@ -50,7 +54,7 @@ function submit() {
     //이상 감지
     if (checkBlank(email) || checkBlank(nickname) || checkBlank(pw)) {
         //check blank
-        alert("값을 올바르게 입력하였는지 확인해주세요.");
+        popup.open("모든 입력칸에 값을 입력해주세요.");
         return false;
     }
     
@@ -68,13 +72,13 @@ function submit() {
         const data = result.trim()
         
         if (data == "verifyerror") {
-            alert("인증번호가 올바르지 않습니다.\n다시 확인해주세요.")
+            popup.open("인증번호가 올바르지 않습니다.<br>다시 확인해주세요.")
         } else if (data == "emailerror") {
-            alert("이미 존재하는 이메일입니다.\n다른 이메일로 다시 시도해주세요.")
+            popup.open("이미 존재하는 이메일입니다.<br>다른 이메일로 다시 시도해주세요.")
             location.reload()
         } else {
-            // alert("회원가입에 성공하였습니다.\n로그인해주세요.");
-            // location.href = "login";
+            alert("회원가입에 성공하였습니다.\n로그인해주세요.");
+            location.href = "/login/";
         }
     })
 }
