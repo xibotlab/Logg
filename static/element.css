@@ -28,6 +28,7 @@ input:hover, textarea:hover {
 input {
     border-radius: 10000px;
     padding: 12px 15px;
+    font-size: 0.9rem;
 }
 textarea {
     border-radius: 17px;
