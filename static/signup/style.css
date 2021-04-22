@@ -16,13 +16,22 @@ input, textarea, button {
     outline: 0;
 }
 
+.formH1 {
+    font-size: 2rem;
+    margin-bottom: 1vh;
+}
+.formInput {
+    margin-bottom: 1vh;
+    width: 240px;
+}
+
 #root {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
 }
-#email {
+#verify {
     position: absolute;
     left: 50%;
     top: 50%;
