@@ -1,52 +1,33 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logg 회원가입</title>
-
-    <link rel="stylesheet" href="(( url_for('static', filename='element.css') ))">
-    <link rel="stylesheet" href="(( url_for('static', filename='signup/style.css') ))">
-    <link rel="shortcut icon" href="(( url_for('static', filename='img/logo.png') ))">
-</head>
-
-<body>
-    <div id="root"></div>
-    <div id="email" hidden>
-        <p style="margin: 1.5vh 0px;">
-            이메일로 인증번호가 발송되었습니다.<br>
-            인증번호를 입력하여 가입을 마칩니다.
-        </p>
-        <input type="number" placeholder="인증번호 입력" id="verify">
-        <button onclick="submit()">인증하기</button>
-    </div>
-</body> -->
-
-<!-- JS
-<script src="(( url_for('static', filename='signup/event.js') ))"></script>
-<script src="(( url_for('static', filename='signup/layout.js') ))"></script>
-</html> -->
-
 (% extends 'template.html' %)
 (% block content %)
 <head>
     <link rel="stylesheet" href="(( url_for('static', filename='element.css') ))">
     <link rel="stylesheet" href="(( url_for('static', filename='signup/style.css') ))">
+    <meta data-form="(( form ))" id="meta">
+
+    <script src="(( url_for('static', filename='signup/index.js') ))"></script>
 </head>
 <body>
-    <div id="root"></div>
-    <div id="email" hidden>
-        <p style="margin: 1.5vh 0px;">
+    <div id="root">
+        (% for i in range(form|length) %)
+        <div id="(( form[i]['id'] ))" hidden style="text-align: center;">
+            <h1 class="formH1">(( form[i]["title"] ))</h1>
+            <input type="(( form[i]['type'] ))" placeholder="(( form[i]['placeholder'] ))" class="formInput" id="(( form[i]['id'] ))input"><br>
+            <button id="btn((i))" onclick="next(id.replace('btn', ''))">확인</button>
+        </div>
+        (% endfor %)
+    </div>
+    <div id="verify" hidden>
+        <p style="margin-bottom: 1.5vh;">
             이메일로 인증번호가 발송되었습니다.<br>
             인증번호를 입력하여 가입을 마칩니다.
         </p>
-        <input type="number" placeholder="인증번호 입력" id="verify">
+        <input type="number" placeholder="인증번호 입력" id="verifyNum">
         <button onclick="submit()">인증하기</button>
     </div>
 </body>
 <!--JS-->
-<script src="(( url_for('static', filename='signup/event.js') ))"></script>
-<script src="(( url_for('static', filename='signup/layout.js') ))"></script>
+<script>
+    document.getElementById("email").hidden = false;
+</script>
 (% endblock %)
