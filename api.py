@@ -73,3 +73,25 @@ Logg에 가입해주셔서 감사합니다.
             return False
 
         conn.close()
+
+class project():
+    def new(self, name, desc, userid):
+        #DB 접속
+        conn = ConnectDb()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("USE logg2;")
+
+        #project 테이블에 insert
+        cursor.execute("insert into project (name, description) values ('{name}', '{desc}');".format(name=name, desc=desc))
+
+        #생성한 project의 아이디 확인하기
+        cursor.execute("select last_insert_id() from project;")
+        idx = int(cursor.fetchall()[0]["last_insert_id()"])
+
+        #자동으로 나를 참가하기
+        cursor.execute("insert into project_people (userid, projectid, owner) values ({userid}, {projectid}, 1);".format(userid=userid, projectid=idx))
+
+        conn.commit()
+        conn.close()
+
+        return 200

@@ -12,6 +12,7 @@ with open("hidden.json", "r") as f:
 
 #인스턴스 생성
 account = api.account()
+project = api.project()
 
 ## set app ##
 #vuejs와 jinja 충돌 방지
@@ -133,26 +134,12 @@ def api_new():
     body = json.loads(request.data)
     name = body["name"]
     desc = body["desc"]
+
+    # 로그인 여부 확인
     try: userid = session["loggUserId"]
     except: return {"status": 403}, 403
 
-    #DB 접속
-    conn = connectDb()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
-    cursor.execute("USE logg2;")
-
-    #project 테이블에 insert
-    cursor.execute("insert into project (name, description) values ('{name}', '{desc}');".format(name=name, desc=desc))
-
-    #생성한 project의 아이디 확인하기
-    cursor.execute("select last_insert_id() from project;")
-    idx = int(cursor.fetchall()[0]["last_insert_id()"])
-    cursor.execute("insert into project_people (userid, projectid, owner) values ({userid}, {projectid}, 1);".format(userid=session["loggUserId"], projectid=idx))
-
-    conn.commit()
-    conn.close()
-
-    return {"status": 200}
+    return {"status": project.new(name, desc, session["loggUserId"])}
 
 ## 기타 ##
 @app.route("/template/")
