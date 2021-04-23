@@ -1,22 +1,17 @@
 ## 모듈 불러오기 ##
 #flask
 from flask import Flask, render_template, request, session
-import pymysql, json, smtplib, random
-#이메일
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import pymysql, json, random
 #암호화
 from flask_bcrypt import Bcrypt
 
+import api
 
-## default settings ##
-#get hidden.js
 with open("hidden.json", "r") as f:
     hidden = json.loads(f.read())
 
-#connect to DB
-def connectDb():
-    return pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
+#인스턴스 생성
+account = api.account()
 
 ## set app ##
 #vuejs와 jinja 충돌 방지
@@ -47,7 +42,33 @@ def login():
 #signup
 @app.route("/signup/")
 def signup():
-    return render_template("signup/index.html")
+    form = [
+        {
+            "id": "email",
+            "title": "이메일",
+            "type": "text",
+            "placeholder": "이메일을 입력해주세요..."
+        },
+        {
+            "id": "nickname",
+            "title": "닉네임",
+            "type": "text",
+            "placeholder": "실명을 입력하지 마세요."
+        },
+        {
+            "id": "pw",
+            "title": "비밀번호",
+            "type": "password",
+            "placeholder": "아무에게도 알려주지 마세요."
+        },
+        {
+            "id": "pwagain",
+            "title": "비밀번호 재입력",
+            "type": "password",
+            "placeholder": "다시 비밀번호를 입력합니다."
+        }
+    ]
+    return render_template("signup/index.html", form=form)
 
 #create_project
 @app.route("/new/")
@@ -64,93 +85,47 @@ def api_login():
     email = data["email"].replace(" ", "")
     pw = data["pw"]
 
-    #connect DB
-    conn = pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
-    cursor.execute("USE logg2;")
+    result = account.login(email, pw, bcrypt)
 
-    #select!
-    cursor.execute("SELECT idx, email, password FROM account WHERE email='{email}';".format(email=email))
-    account = cursor.fetchall()
-
-    #check if email exists
-    if len(account) == 0:
-        return {"status": 404}
-
-    #password
-    if bcrypt.check_password_hash(account[0]["password"], pw):
-        session["loggUserId"] = int(account[0]["idx"])
-        return {"status": 200}
-
+    if result:
+        session["loggUserId"] = result
+        return {"status": 200}, 200
     else:
-        #wrong password
-        return {"status": 403}
+        return {"status": 500}, 500
 
-    conn.close()
+
 
 #이메일 인증
 @app.route("/api/signup/verify/", methods=["GET", "POST"])
 def signup_verify():
     #get query string
     data = json.loads(request.data.decode())
-    adress = data["adress"]
+    email = data["adress"]
     nickname = data["nickname"]
-    verify = random.randint(1000, 9999)
+    code = random.randint(1000, 9999)
 
     #세션에 인증번호를 저장
-    session["verify"] = verify
+    session["verify"] = code
 
-    #SMTP 이메일 로그인
-    s = smtplib.SMTP('smtp.gmail.com', 587)
-    s.starttls()
-    s.login("xibotlab@gmail.com", hidden["email"]["pw"])
-
-    #인증 메일 전송하기
-    msg = MIMEMultipart("alternative")
-    msg["subject"] = "[Logg] 인증번호 발송"
-    msg['From'] = 'xibotlab@gmail.com'
-    msg['To'] = adress
-
-    msg.attach(MIMEText(render_template("email/index.html", username=nickname, code=str(verify)), "html"))
-    s.send_message(msg)
-
-    s.quit()
-
-    return {"status": 200}
+    if account.sendverify(email, nickname, code):
+        return {"status": 200}, 200
+    else:
+        return {"status": 500}, 500
 
 @app.route("/api/signup/", methods=["POST"])
 def api_signup():
-    #get post information
+    #body 가져오기
     data = json.loads(request.data.decode())
-    username = data["username"]
-    password = bcrypt.generate_password_hash(data["password"]).decode("utf-8")
     email = data["email"]
-    verify = data["verify"]
-
-    #DB 로그인
-    conn = connectDb()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
-    cursor.execute("use logg2;")
+    nickname = data["username"]
+    pw = bcrypt.generate_password_hash(data["password"]).decode("utf-8")
+    code = int(data["verify"])
 
     #인증번호 체크
-    if not str(session["verify"]) == (verify):
-        return "verifyerror"
-
-    #이미 존재하는 이메일인지 체크
-    cursor.execute("SELECT email FROM account WHERE email='{email}';".format(email=email.replace(" ", "")))
-    if len(cursor.fetchall()) > 0:
-        return "emailerror"
-
-    #load db password
-    dbpw = hidden["db"]["pw"]
-
-    #insert into db
-    cursor.execute('INSERT INTO account (username, password, created, description, email) VALUES ("{username}", "{password}", NOW(), "false", "{email}")'.format(username=username, password=password, email=email))
-
-    conn.commit()
-    conn.close()
-
-    return "success"
+    if not session["verify"] == int(code):
+        return {"status": 403}, 403
+        
+    return {"status": account.signup(email, nickname, pw)}
 
 @app.route("/api/new/", methods=["POST"])
 def api_new():

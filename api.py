@@ -1,0 +1,75 @@
+import pymysql, json, smtplib
+from email.mime.text import MIMEText
+
+#hidden.json 읽기
+with open("hidden.json", "r") as f: hidden = json.loads(f.read())
+
+#DB 연결 함수
+def ConnectDb():
+    return pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
+
+class account():
+    def sendverify(self, email, nickname, code):
+        #SMTP 이메일 로그인
+        s = smtplib.SMTP('smtp.gmail.com', 587)
+        s.starttls()
+        s.login("xibotlab@gmail.com", hidden["email"]["pw"])
+
+        #인증 메일 전송하기
+        msg = MIMEText("""안녕하세요, {nickname}님.
+Logg 회원가입 시 필요한 인증코드를 전송해 드립니다.
+이 과정을 마치면 {nickname}님은 Logg의 정식 회원으로 등록됩니다.
+        
+인증코드: {code}
+        
+Logg에 가입해주셔서 감사합니다.
+- Logg 팀 드림""".format(nickname=nickname, code=code))
+        msg["subject"] = "[Logg] 인증번호 발송"
+        msg['From'] = 'xibotlab@gmail.com'
+        msg['To'] = email
+
+        s.send_message(msg)
+
+        s.quit()
+
+        return True
+
+    def signup(self, email, nickname, pw):
+        #DB 로그인
+        conn = ConnectDb()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("use logg2;")
+
+        #이미 존재하는 이메일인지 체크
+        cursor.execute("SELECT email FROM account WHERE email='{email}';".format(email=email.replace(" ", "")))
+        if len(cursor.fetchall()) > 0:
+            return "emailerr"
+
+        #insert into db
+        cursor.execute('INSERT INTO account (username, password, created, description, email) VALUES ("{nickname}", "{password}", NOW(), "false", "{email}")'.format(nickname=nickname, password=pw, email=email))
+
+        conn.commit()
+        conn.close()
+
+        return True
+
+    def login(self, email, pw, object):
+        #DB 연결하기
+        conn = ConnectDb()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("USE logg2;")
+
+        #DB에서 계정 정보 가져오기
+        cursor.execute("SELECT idx, email, password FROM account WHERE email='{email}';".format(email=email))
+        account = cursor.fetchall()
+
+        #아이디가 존재하는지 확인
+        if len(account) == 0:
+            return False
+        elif object.check_password_hash(account[0]["password"], pw):
+            return int(account[0]["idx"])
+        else:
+            #잘못된 비밀번호
+            return False
+
+        conn.close()
