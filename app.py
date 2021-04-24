@@ -13,6 +13,7 @@ with open("hidden.json", "r") as f:
 #인스턴스 생성
 account = api.account()
 project = api.project()
+dbaccount = api.db.account()
 
 ## set app ##
 #vuejs와 jinja 충돌 방지
@@ -84,9 +85,9 @@ def api_login():
     #get body
     data = json.loads(request.data.decode())
     email = data["email"].replace(" ", "")
-    pw = data["pw"]
+    ispw = bcrypt.check_password_hash(dbaccount.email(email)["password"], data["pw"])
 
-    result = account.login(email, pw, bcrypt)
+    result = account.login(email, ispw, bcrypt)
 
     if result:
         session["loggUserId"] = result

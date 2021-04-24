@@ -4,9 +4,29 @@ from email.mime.text import MIMEText
 #hidden.json 읽기
 with open("hidden.json", "r") as f: hidden = json.loads(f.read())
 
-#DB 연결 함수
-def ConnectDb():
-    return pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
+class db():
+    @classmethod
+    def connect(self):
+        return pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
+    
+    class account():
+        def __init__(self):
+            self.conn = pymysql.connect(host="localhost", user="root", password=hidden["db"]["pw"])
+            self.cursor = self.conn.cursor(pymysql.cursors.DictCursor)
+            self.cursor.execute("USE logg2")
+
+        def all(self):
+            self.cursor.execute("select * from account;")
+            return self.cursor.fetchall()
+
+        def email(self, email):
+            self.cursor.execute("select * from account where email='{email}';".format(email=email))
+            result = self.cursor.fetchall()
+
+            if len(result) == 0:
+                return False
+            else:
+                return result[0]
 
 class account():
     def sendverify(self, email, nickname, code):
@@ -36,7 +56,7 @@ Logg에 가입해주셔서 감사합니다.
 
     def signup(self, email, nickname, pw):
         #DB 로그인
-        conn = ConnectDb()
+        conn = db.connect()
         cursor = conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("use logg2;")
 
@@ -53,20 +73,20 @@ Logg에 가입해주셔서 감사합니다.
 
         return True
 
-    def login(self, email, pw, object):
+    def login(self, email, ispw, bcrypt):
         #DB 연결하기
-        conn = ConnectDb()
+        conn = db.connect()
         cursor = conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("USE logg2;")
 
         #DB에서 계정 정보 가져오기
-        cursor.execute("SELECT idx, email, password FROM account WHERE email='{email}';".format(email=email))
+        cursor.execute("SELECT idx, email FROM account WHERE email='{email}';".format(email=email))
         account = cursor.fetchall()
 
         #아이디가 존재하는지 확인
         if len(account) == 0:
             return False
-        elif object.check_password_hash(account[0]["password"], pw):
+        elif ispw:
             return int(account[0]["idx"])
         else:
             #잘못된 비밀번호
@@ -77,7 +97,7 @@ Logg에 가입해주셔서 감사합니다.
 class project():
     def new(self, name, desc, userid):
         #DB 접속
-        conn = ConnectDb()
+        conn = db.connect()
         cursor = conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("USE logg2;")
 
