@@ -16,16 +16,12 @@ function login() {
     .then(data => {
         const status = data.status;
 
-        switch (status) {
-            case 404:
-                alert("계정이 존재하지 않습니다.\n이메일을 다시 확인해주세요.");
-                break;
-            case 403:
-                alert("비밀번호가 알맞지 않습니다.\n비밀번호를 다시 확인해주세요.");
-                break;
-            case 200:
-                location.href = "/"
-                break;
+        if (status == 404) {
+            popup.open("계정이 존재하지 않습니다.<br>아이디를 확인해주세요.");
+        } else if (status == 403) {
+            popup.open("비밀번호가 올바르지 않습니다.<br>다시 시도해주세요.");
+        } else if (status == 200) {
+            location.href = "/"
         }
     })
 }
