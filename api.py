@@ -73,27 +73,6 @@ Logg에 가입해주셔서 감사합니다.
 
         return True
 
-    def login(self, email, ispw, bcrypt):
-        #DB 연결하기
-        conn = db.connect()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("USE logg2;")
-
-        #DB에서 계정 정보 가져오기
-        cursor.execute("SELECT idx, email FROM account WHERE email='{email}';".format(email=email))
-        account = cursor.fetchall()
-
-        #아이디가 존재하는지 확인
-        if len(account) == 0:
-            return False
-        elif ispw:
-            return int(account[0]["idx"])
-        else:
-            #잘못된 비밀번호
-            return False
-
-        conn.close()
-
 class project():
     def new(self, name, desc, userid):
         #DB 접속

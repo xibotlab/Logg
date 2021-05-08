@@ -45,30 +45,10 @@ def login():
 @app.route("/signup/")
 def signup():
     form = [
-        {
-            "id": "email",
-            "title": "이메일",
-            "type": "text",
-            "placeholder": "이메일을 입력해주세요..."
-        },
-        {
-            "id": "nickname",
-            "title": "닉네임",
-            "type": "text",
-            "placeholder": "실명을 입력하지 마세요."
-        },
-        {
-            "id": "pw",
-            "title": "비밀번호",
-            "type": "password",
-            "placeholder": "아무에게도 알려주지 마세요."
-        },
-        {
-            "id": "pwagain",
-            "title": "비밀번호 재입력",
-            "type": "password",
-            "placeholder": "다시 비밀번호를 입력합니다."
-        }
+        {"id": "email", "title": "이메일", "type": "text", "placeholder": "이메일을 입력해주세요..."},
+        {"id": "nickname", "title": "닉네임", "type": "text", "placeholder": "실명을 입력하지 마세요."},
+        {"id": "pw", "title": "비밀번호", "type": "password", "placeholder": "아무에게도 알려주지 마세요."},
+        {"id": "pwagain", "title": "비밀번호 재입력", "type": "password", "placeholder": "다시 비밀번호를 입력합니다."}
     ]
     return render_template("signup/index.html", form=form)
 
@@ -85,15 +65,17 @@ def api_login():
     #get body
     data = json.loads(request.data.decode())
     email = data["email"].replace(" ", "")
-    ispw = bcrypt.check_password_hash(dbaccount.email(email)["password"], data["pw"])
-
-    result = account.login(email, ispw, bcrypt)
-
-    if result:
-        session["loggUserId"] = result
-        return {"status": 200}, 200
+    pw = data["pw"]
+    
+    account = dbaccount.email(email)
+    #아이디가 존재하지 않다면:
+    if account == False:
+        return {"status": 404}
+    elif not bcrypt.check_password_hash(account["password"], pw):
+        return {"status": 403}
     else:
-        return {"status": 500}, 500
+        session["account"] = account["idx"]
+        return {"status": 200}
 
 
 
