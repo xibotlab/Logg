@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logg 로그인</title>
+(% extends 'template.html' %)
 
-    <!--CSS-->
+(% block content %)
+<head>
+    <title>Logg 로그인</title>
     <link rel="shortcut icon" href="(( url_for('static', filename='img/logo.png') ))">
     <link rel="stylesheet" href="(( url_for('static', filename='element.css') ))">
     <link rel="stylesheet" href="((url_for('static', filename='login/style.css') ))">
@@ -14,9 +10,9 @@
 <body>
     <div id="root">
         <h1>로그인</h1>
-
+    
         <div style="margin-top: 1vh;">
-            <input type="text" placeholder="이메일" id="email"><br>
+            <input type="text" placeholder="이메일" id="email" autofocus><br>
             <input type="password" placeholder="비밀번호" id="pw"><br>
         </div>
         
@@ -25,5 +21,6 @@
         </div>
     </div>
 </body>
+
 <script src="(( url_for('static', filename='login/index.js') ))"></script>
-</html>
+(% endblock %)

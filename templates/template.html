@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css"> <!--나눔스퀘어-->
-    <link rel="shortcut icon" href="(( url_for('static', filename='img/logo.png') ))">
+    <link rel="shortcut icon" href="(( url_for('static', filename='img/logo2.png') ))">
     <link rel="stylesheet" href="(( url_for('static', filename='/element.css') ))">
 
     <style>
@@ -50,9 +50,8 @@
     <script src="(( url_for('static', filename='api.js') ))"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> <!--jQuery-->
 </head>
+(% block content %)(% endblock %)
 <body>
-    (% block content %)(% endblock %)
-
     <!--팝업창-->
     <div id="pop" hidden>
         <div id="popblack"></div>
