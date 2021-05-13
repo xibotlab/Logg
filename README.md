@@ -56,4 +56,4 @@ Create `hidden.json` in cloned directory, than set this information:
 }
 ```
 
-Go to `localhost:3000`. Dev mode will open.
+Go to `localhost:5000`. Dev mode will open.
