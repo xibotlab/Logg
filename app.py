@@ -62,11 +62,12 @@ def projectPage(idx):
     cursor = db.connect().cursor(pymysql.cursors.DictCursor)
     cursor.execute("use logg2;")
     cursor.execute("select * from project where idx={idx};".format(idx=idx))
-    
-    if len(cursor.fetchall()) == 0:
+    project = cursor.fetchall()
+
+    if len(project) == 0:
         return "404 Not Found", 404
     else:
-        return render_template("/project/index.html")
+        return render_template("/project/index.html", name=project[0]["name"])
 
 ## api ##
 #login
