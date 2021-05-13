@@ -1,5 +1,4 @@
 ## 모듈 불러오기 ##
-#flask
 from flask import Flask, render_template, request, session
 import pymysql, json, random
 #암호화
@@ -13,10 +12,10 @@ with open("hidden.json", "r") as f:
 #인스턴스 생성
 account = api.account()
 project = api.project()
+db = api.db()
 dbaccount = api.db.account()
 
 ## set app ##
-#vuejs와 jinja 충돌 방지
 class MyFlask(Flask):
     jinja_options = Flask.jinja_options.copy()
     jinja_options.update(dict(
@@ -57,6 +56,17 @@ def signup():
 def newproject():
     return render_template("/newproject/index.html")
 
+#project page
+@app.route("/project/<idx>/")
+def projectPage(idx):
+    cursor = db.connect().cursor(pymysql.cursors.DictCursor)
+    cursor.execute("use logg2;")
+    cursor.execute("select * from project where idx={idx};".format(idx=idx))
+    
+    if len(cursor.fetchall()) == 0:
+        return "404 Not Found", 404
+    else:
+        return render_template("/project/index.html")
 
 ## api ##
 #login
@@ -76,7 +86,6 @@ def api_login():
     else:
         session["account"] = account["idx"]
         return {"status": 200}
-
 
 
 #이메일 인증
