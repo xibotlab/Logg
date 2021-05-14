@@ -85,7 +85,7 @@ def api_login():
     elif not bcrypt.check_password_hash(account["password"], pw):
         return {"status": 403}
     else:
-        session["account"] = account["idx"]
+        session["loggUserId"] = account["idx"]
         return {"status": 200}
 
 
