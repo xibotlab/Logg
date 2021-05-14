@@ -121,7 +121,7 @@ def api_signup():
         
     return {"status": account.signup(email, nickname, pw)}
 
-@app.route("/api/new/", methods=["POST"])
+@app.route("/api/project/new/", methods=["POST"])
 def api_new():
     #기본 변수 지정
     body = json.loads(request.data)

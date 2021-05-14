@@ -7,7 +7,7 @@ document.getElementById("submit").addEventListener("click", () => {
     if (name.trim() == "" || desc.trim() == "") {
         popup.open("프로젝트 이름과 설명은 필수입니다.<br>올바른 값을 입력해주세요.")
     } else {
-        fetch("/api/new/", {
+        fetch("/api/project/new/", {
             method: "POST",
             body: JSON.stringify({
                 name: name,
