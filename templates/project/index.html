@@ -1,0 +1,10 @@
+(% extends 'template.html' %)
+(% block content %)
+<head>
+    <meta id="project" data-idx="(( idx ))">
+</head>
+<body>
+    <input type="text" id="name" value="(( name ))" placeholder="프로젝트 이름" style="padding: 8px;">
+</body>
+<script src="(( url_for('static', filename='/project/index.js') ))"></script>
+(% endblock %)

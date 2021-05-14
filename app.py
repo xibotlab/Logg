@@ -67,7 +67,7 @@ def projectPage(idx):
     if len(project) == 0:
         return "404 Not Found", 404
     else:
-        return render_template("/project/index.html", name=project[0]["name"])
+        return render_template("/project/index.html", idx=idx, name=project[0]["name"])
 
 ## api ##
 #login
@@ -133,6 +133,27 @@ def api_new():
     except: return {"status": 403}, 403
 
     return {"status": project.new(name, desc, session["loggUserId"])}
+
+@app.route("/api/project/update/name/", methods=["POST"])
+def update_project_name():
+    #set MYSQL DB
+    conn = db.connect()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute("use logg2;")
+
+    #get BODY
+    body = json.loads(request.data.decode())
+    idx = body["idx"]
+    name = body["name"]
+
+    try:
+        cursor.execute("update project set name='{name}' where idx={idx};".format(name=name, idx=idx))
+
+        conn.commit()
+        conn.close()
+        return {"status": 200}
+    except:
+        return {"status": 404}, 404
 
 ## 기타 ##
 @app.route("/template/")
