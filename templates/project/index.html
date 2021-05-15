@@ -2,9 +2,12 @@
 (% block content %)
 <head>
     <meta id="project" data-idx="(( idx ))">
+    <link rel="stylesheet" href="(( url_for('static', filename='/project/style.css') ))">
 </head>
 <body>
-    <input type="text" id="name" value="(( name ))" placeholder="프로젝트 이름" style="padding: 8px;">
+    <div id="banner">
+        <input type="text" id="name" value="(( name ))" placeholder="프로젝트 이름" style="padding: 9px;">
+    </div>
 </body>
 <script src="(( url_for('static', filename='/project/index.js') ))"></script>
 (% endblock %)
