@@ -6,6 +6,7 @@ Required:
 <ul>
  <li>Git</li>
  <li>Python</li>
+ <li>TypeScript</li>
  <li>MySQL</li>
 </ul>
 
