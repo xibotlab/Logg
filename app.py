@@ -160,10 +160,6 @@ def update_project_name():
 def template():
     return render_template("template.html")
 
-@app.route("/session/login/")
-def session_login():
-    return str(session["loggUserId"])
-
 #debug mode
 if __name__ == "__main__":
     app.run(debug=True)
