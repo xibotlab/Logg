@@ -1,7 +1,9 @@
-document.getElementById("submit").addEventListener("click", () => {
+import { popup } from "../api.js"
+
+document.getElementById("submit")?.addEventListener("click", () => {
     //element 가져오기
-    const name = document.getElementById("name").value;
-    const desc = document.getElementById("desc").value;
+    const name = (<HTMLInputElement>document.getElementById("name")).value;
+    const desc = (<HTMLInputElement>document.getElementById("desc")).value;
 
     //공백 확인
     if (name.trim() == "" || desc.trim() == "") {

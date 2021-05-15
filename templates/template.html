@@ -36,18 +36,18 @@
             width: 280px;
             border-radius: 20px;
 
-            background-color: white;
+            background-color: #2d313b;
 
             text-align: center;
 
-            padding: 6vh;
+            padding: 7vh;
         }
         #popvalue {
             font-size: 1rem;
         }
     </style>
 
-    <script src="(( url_for('static', filename='api.js') ))"></script>
+    <!-- <script src="(( url_for('static', filename='api.js') ))" type="module" ></script> -->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> <!--jQuery-->
 </head>
 (% block content %)(% endblock %)
@@ -60,7 +60,7 @@
                 팝업 내용이 이곳에 표시됩니다.<br>
                 Hello World! 안녕!
             </p>
-            <button style="margin-top: 1.5vh;" onclick="popup.close()"><strong>확인</strong></button>
+            <button style="margin-top: 1.5vh;" id="popclose">확인</button>
         </div>
     </div>
 </body>

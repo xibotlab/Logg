@@ -3,9 +3,9 @@
 <head>
     <link rel="stylesheet" href="(( url_for('static', filename='element.css') ))">
     <link rel="stylesheet" href="(( url_for('static', filename='signup/style.css') ))">
-    <meta data-form="(( form ))" id="meta">
+    <meta data-form="(( form ))" id="form">
 
-    <script src="(( url_for('static', filename='signup/index.js') ))"></script>
+    <script type="module" src="(( url_for('static', filename='signup/index.js') ))"></script>
 </head>
 <body>
     <div id="root">
@@ -13,7 +13,7 @@
         <div id="(( form[i]['id'] ))" hidden style="text-align: center;">
             <h1 class="formH1">(( form[i]["title"] ))</h1>
             <input type="(( form[i]['type'] ))" placeholder="(( form[i]['placeholder'] ))" class="formInput" id="(( form[i]['id'] ))input"><br>
-            <button id="btn((i))" onclick="next(id.replace('btn', ''))">확인</button>
+            <button id="btn((i))">확인</button>
         </div>
         (% endfor %)
     </div>
@@ -23,7 +23,7 @@
             인증번호를 입력하여 가입을 마칩니다.
         </p>
         <input type="number" placeholder="인증번호 입력" id="verifynum">
-        <button onclick="submit()">인증하기</button>
+        <button id="verifybtn">인증하기</button>
     </div>
 </body>
 <!--JS-->
