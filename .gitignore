@@ -1,2 +1,3 @@
 hidden.json
 *.js
+__pycache__
