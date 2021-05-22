@@ -69,6 +69,11 @@ def projectPage(idx):
     else:
         return render_template("/project/index.html", idx=idx, name=project[0]["name"])
 
+#project settings
+@app.route("/project/settings/<idx>/")
+def project_settings(idx):
+    return render_template("/project/settings/index.html", idx=idx, category=None)
+
 ## api ##
 #login
 @app.route("/api/login/", methods=["POST"])

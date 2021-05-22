@@ -1,4 +1,4 @@
-import { popup } from "../api.js"
+import { popup } from "../../api.js"
 
 document.getElementById("submit")?.addEventListener("click", () => {
     //element 가져오기

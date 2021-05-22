@@ -1,4 +1,4 @@
-import { popup } from "../api.js"
+import { popup } from "../../api.js"
 
 const form = JSON.parse(document.getElementById("form")?.dataset.form?.replace(/'/g, '"')!)
 
