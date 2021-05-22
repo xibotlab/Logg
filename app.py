@@ -38,7 +38,7 @@ bcrypt = Bcrypt(app)
 #login
 @app.route("/login/")
 def login():
-    return render_template("login/index.html")
+    return render_template("account/login/index.html")
 
 #signup
 @app.route("/signup/")
@@ -49,12 +49,12 @@ def signup():
         {"id": "pw", "title": "비밀번호", "type": "password", "placeholder": "아무에게도 알려주지 마세요."},
         {"id": "pwagain", "title": "비밀번호 재입력", "type": "password", "placeholder": "다시 비밀번호를 입력합니다."}
     ]
-    return render_template("signup/index.html", form=form)
+    return render_template("account/signup/index.html", form=form)
 
 #create_project
 @app.route("/new/")
 def newproject():
-    return render_template("/newproject/index.html")
+    return render_template("/project/new/index.html")
 
 #project page
 @app.route("/project/<idx>/")
