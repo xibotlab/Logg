@@ -70,9 +70,10 @@ def projectPage(idx):
         return render_template("/project/index.html", idx=idx, name=project[0]["name"])
 
 #project settings
+SettingMenu = ["기본정보", "개인정보"]
 @app.route("/project/settings/<idx>/")
 def project_settings(idx):
-    return render_template("/project/settings/index.html", idx=idx, category=None)
+    return render_template("/project/settings/index.html", idx=idx, selected=None, category=SettingMenu)
 
 ## api ##
 #login
@@ -167,4 +168,4 @@ def template():
 
 #debug mode
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=3100)
