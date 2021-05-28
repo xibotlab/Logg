@@ -20,6 +20,7 @@ Installing Python packages:
 pip install flask
 pip install bcrypt
 pip install pymysql
+pip install flask_bcrypt
 ```
 
 Set MySQL:
