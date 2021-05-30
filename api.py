@@ -94,3 +94,21 @@ class project():
         conn.close()
 
         return 200
+
+    def update(self, idx, item, value):
+        #DB 접속
+        conn = db.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("USE logg2;")
+
+        #project 테이블 update
+        try:
+            cursor.execute("update project set {item}='{value}' where idx={idx};".format(item=item, value=value, idx=idx))
+
+            conn.commit()
+            conn.close()
+
+            return True
+        except:
+            return 404
+        
