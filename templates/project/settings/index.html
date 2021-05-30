@@ -16,8 +16,17 @@
     </nav>
 
     <article>
-        <p>init</p>
+        <div id="page0" hidden>
+            <div class="menu">
+                <h3>프로젝트 이름</h3>
+                <input type="text" id="name" value="(( name ))">
+            </div>
+        </div>
+
+        <div id="page1" hidden>
+            미완성
+        </div>
     </article>
 </body> 
-<script src="(( url_for('static', filename='/project/settings/index.js') ))"></script>
+<script src="(( url_for('static', filename='/project/settings/index.js') ))" type="module"></script>
 (% endblock %)

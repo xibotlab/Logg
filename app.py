@@ -73,7 +73,14 @@ def projectPage(idx):
 SettingMenu = ["기본정보", "개인정보"]
 @app.route("/project/settings/<idx>/")
 def project_settings(idx):
-    return render_template("/project/settings/index.html", idx=idx, selected=None, category=SettingMenu)
+    cursor = db.connect().cursor(pymysql.cursors.DictCursor)
+    cursor.execute("use logg2;")
+    
+    #name 가져오기
+    cursor.execute("select name from project where idx={idx};".format(idx=idx))
+    name = cursor.fetchall()[0]["name"]
+    
+    return render_template("/project/settings/index.html", idx=idx, selected=None, category=SettingMenu, name=name)
 
 ## api ##
 #login

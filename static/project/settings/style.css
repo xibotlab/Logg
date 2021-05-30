@@ -1,3 +1,7 @@
+body {
+    padding: 60px;
+}
+
 /* category */
 nav {
     float: left;
@@ -23,3 +27,6 @@ nav {
 }
 
 /* article */
+.menu {
+    margin-bottom: 2vh;
+}
