@@ -34,3 +34,15 @@ document.getElementById("name")?.addEventListener("change", () => {
         })
     })
 })
+
+document.getElementById("desc")?.addEventListener("change", () => {
+    const desc:string = (<HTMLInputElement>document.getElementById("desc"))?.value;
+
+    fetch("/api/project/update/desc/", {
+        method: "POST",
+        body: JSON.stringify({
+            idx: idx,
+            desc: desc
+        })
+    })
+})

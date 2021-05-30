@@ -1,11 +1,15 @@
 body {
     padding: 60px;
+    display: flex;
+}
+input {
+    width: 300px;
 }
 
 /* category */
 nav {
-    float: left;
-    margin-right: 10px;
+    margin-right: 15px;
+    height: 100%;
 }
 .category {
     display: inline-block;
@@ -27,6 +31,10 @@ nav {
 }
 
 /* article */
+article {
+    display: inline-block;
+    width: 100%;
+}
 .menu {
     margin-bottom: 2vh;
 }

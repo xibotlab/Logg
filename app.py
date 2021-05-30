@@ -79,8 +79,12 @@ def project_settings(idx):
     #name 가져오기
     cursor.execute("select name from project where idx={idx};".format(idx=idx))
     name = cursor.fetchall()[0]["name"]
-    
-    return render_template("/project/settings/index.html", idx=idx, selected=None, category=SettingMenu, name=name)
+
+    #description 가져오기
+    cursor.execute("select description from project where idx={idx};".format(idx=idx))
+    desc = cursor.fetchall()[0]["description"]
+
+    return render_template("/project/settings/index.html", idx=idx, selected=None, category=SettingMenu, name=name, desc=desc)
 
 ## api ##
 #login
@@ -161,6 +165,27 @@ def update_project_name():
 
     try:
         cursor.execute("update project set name='{name}' where idx={idx};".format(name=name, idx=idx))
+
+        conn.commit()
+        conn.close()
+        return {"status": 200}
+    except:
+        return {"status": 404}, 404
+
+@app.route("/api/project/update/desc/", methods=["POST"])
+def update_project_desc():
+    #DB 설정
+    conn = db.connect()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute("use logg2;")
+
+    #BODY 가져오기
+    body = json.loads(request.data.decode())
+    idx = body["idx"]
+    desc = body["desc"]
+
+    try:
+        cursor.execute("update project set description='{desc}' where idx={idx};".format(desc=desc, idx=idx))
 
         conn.commit()
         conn.close()
