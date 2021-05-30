@@ -1,0 +1,25 @@
+/* category */
+nav {
+    float: left;
+    margin-right: 10px;
+}
+.category {
+    display: inline-block;
+    width: 150px;
+
+    background-color: #202329;
+    padding: 12px;
+    margin-bottom: 5px;
+
+    border: none;
+    border-radius: 5px;
+
+    font-size: 0.9rem;
+
+    border-left: 4px solid #4a4a4a;
+}
+.select {
+    border-left: 4px solid #ff6459;
+}
+
+/* article */

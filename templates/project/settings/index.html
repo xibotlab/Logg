@@ -2,6 +2,22 @@
 
 (% block content %)
 <head>
-    <meta id="info" data-idx="(( idx ))">
+    <meta id="param" data-idx="(( idx ))" data-category="(( category ))">
+
+    <link rel="stylesheet" href="(( url_for('static', filename='/project/settings/style.css') ))">
 </head>
+<body>
+    <nav>
+        (% for i in range(0, category|length) %)
+            <div class="category" id="category(( i ))">
+                <span>(( category[i] ))</span>
+            </div><br>
+        (% endfor %)
+    </nav>
+
+    <article>
+        <p>init</p>
+    </article>
+</body> 
+<script src="(( url_for('static', filename='/project/settings/index.js') ))"></script>
 (% endblock %)
