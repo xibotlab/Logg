@@ -1,21 +1,15 @@
-# Logg
-Logg is the social network service from Moonlab.
+# 소개
+Logg는 MoonLab의 프로젝트 관리 서비스입니다.
 
-## Running
-Required:
+## 실행
+요구사항:
 <ul>
- <li>Git</li>
  <li>Python</li>
  <li>TypeScript</li>
  <li>MySQL</li>
 </ul>
 
-Clone project:
-```
-git clone https://github.com/xibotlab/logg.git;
-```
-
-Installing Python packages:
+pip로 Python 패키지 설치:
 ```
 pip install flask
 pip install bcrypt
@@ -23,7 +17,7 @@ pip install pymysql
 pip install flask_bcrypt
 ```
 
-Set MySQL:
+MySQL 테이블 설정:
 ```
 create database logg2;
 use logg2;
@@ -33,24 +27,24 @@ create table project (idx int(11) not null auto_increment, name varchar(50) not 
 create table project_people (idx int(11) not null auto_increment, userid int(11) not null, projectid int(11) not null, owner boolean not null default 0, primary key(idx));
 ```
 
-Create `hidden.json` in cloned directory, than set this information:
+`hidden.json`을 만들어 다음 내용을 삽입하세요.
 ```
 {
     "db": {
-        "pw": database_password
+        "pw": MySQL_ROOT_PW
     },
     "email": {
-        "pw": your_email_password
+        "pw": EMAIL_APP_PW
     },
     "app": {
-        "key": app_secret_key
+        "key": APP_SECRET_KEY
     }
 }
 ```
 
-Compile TypeScript into Javascript with a single command:
+TypeScript를 컴파일합니다.
 ```
 tsc
 ```
 
-Run app.py and go to `localhost:5000`. Dev mode will open.
+`app.py`를 실행하고 `localhost:5000`으로 이동하세요. 개발자 모드로 앱을 실행합니다.
