@@ -5,7 +5,6 @@ Logg는 MoonLab의 프로젝트 관리 서비스입니다.
 요구사항:
 <ul>
  <li>Python</li>
- <li>TypeScript</li>
  <li>MySQL</li>
 </ul>
 
@@ -40,11 +39,6 @@ create table project_people (idx int(11) not null auto_increment, userid int(11)
         "key": APP_SECRET_KEY
     }
 }
-```
-
-TypeScript를 컴파일합니다.
-```
-tsc
 ```
 
 `app.py`를 실행하고 `localhost:5000`으로 이동하세요. 개발자 모드로 앱을 실행합니다.
