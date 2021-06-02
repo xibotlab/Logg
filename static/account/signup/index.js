@@ -1,5 +1,3 @@
-import { popup } from "../../api.js"
-
 const form = JSON.parse(document.getElementById("form").dataset.form.replace(/'/g, '"'))
 
 function CheckBlank(value) {
@@ -12,7 +10,7 @@ function CheckBlank(value) {
 }
 
 for (let idx=0; idx<form.length; idx++) {
-    document.getElementById(`btn${idx}`)?.addEventListener("click", () => {
+    document.getElementById(`btn${idx}`).addEventListener("click", () => {
         if (idx == form.length-1) {
             const email = document.getElementById("emailinput").value;
             const nickname = document.getElementById("nicknameinput").value;

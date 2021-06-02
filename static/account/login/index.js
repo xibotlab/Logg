@@ -1,6 +1,4 @@
-import { popup } from "../../api.js";
-
-document.getElementById("submit")?.addEventListener("click", () => {
+document.getElementById("submit").addEventListener("click", () => {
     const email = document.getElementById("email").value.trim();
     const pw = document.getElementById("pw").value.trim();
 

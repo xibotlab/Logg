@@ -1,5 +1,3 @@
-import { popup } from "../../api";
-
 const idx = Number(document.getElementById("param")?.dataset.idx);
 
 const category = {
