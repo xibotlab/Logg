@@ -32,6 +32,13 @@
             미완성
         </div>
     </article>
+
+    <!--프로젝트 사진-->
+    <form action="/api/project/update/img/(( idx ))/" method="POST" enctype="multipart/form-data" id="imgDiv">
+        <img src="/api/project/get/img/(( idx ))" alt="프로젝트 프로필" id="img" onclick="document.getElementById('imgFile').click();">
+        <input type="file" id="imgFile" onchange="document.getElementById('imgSubmit').click()" name="img" hidden>
+        <input type="submit" id="imgSubmit" hidden>
+    </form>
 </body> 
 <script src="(( url_for('static', filename='/project/settings/index.js') ))" type="module"></script>
 (% endblock %)

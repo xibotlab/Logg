@@ -21,7 +21,7 @@ for (let i=0; i<category.category.length; i++) {
 category.select(0);
 
 // 메인 페이지 변경 이벤트
-document.getElementById("name")?.addEventListener("change", () => {
+document.getElementById("name").addEventListener("change", () => {
     const name = document.getElementById("name").value;
 
     fetch("/api/project/update/name/", {
@@ -33,7 +33,7 @@ document.getElementById("name")?.addEventListener("change", () => {
     })
 })
 
-document.getElementById("desc")?.addEventListener("change", () => {
+document.getElementById("desc").addEventListener("change", () => {
     const desc = document.getElementById("desc").value;
 
     fetch("/api/project/update/desc/", {

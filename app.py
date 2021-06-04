@@ -1,6 +1,7 @@
 ## 모듈 불러오기 ##
-from flask import Flask, render_template, request, session
-import pymysql, json, random
+from flask import Flask, render_template, request, session, redirect, send_file
+from werkzeug.utils import secure_filename
+import pymysql, json, random, os
 #암호화
 from flask_bcrypt import Bcrypt
 
@@ -30,6 +31,7 @@ class MyFlask(Flask):
 app = MyFlask(__name__)
 app.secret_key = hidden["app"]["key"]
 app.config['BCRYPT_LEVEL'] = 5
+app.config["UPLOAD_FOLDER"] = "file/"
 
 bcrypt = Bcrypt(app)
 
@@ -87,6 +89,10 @@ def project_settings(idx):
     return render_template("/project/settings/index.html", idx=idx, selected=None, category=SettingMenu, name=name, desc=desc)
 
 ## api ##
+@app.route("/api/img/<idx>/")
+def api_img(idx):
+    return send_file("./file/{idx}.png".format(idx=idx), mimetype="image/png")
+
 #login
 @app.route("/api/login/", methods=["POST"])
 def api_login():
@@ -176,6 +182,54 @@ def update_project_desc():
         return {"status": 200}
     elif result == 404:
         return {"status": 404}
+
+@app.route("/api/project/update/img/<idx>/", methods=["POST"])
+def update_project_img(idx):
+    #DB 접속
+    conn = db.connect()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute("USE logg2;")
+
+    #프로젝트 존재여부
+    cursor.execute("select * from project where idx={idx};".format(idx=idx))
+    project = cursor.fetchall()
+
+    if len(project) == 0:
+        return {"status": 404}
+    else:
+        code = project[0]["img"]
+        if code == None:
+            code = random.randint(0, 999999)
+
+        #이미지 저장
+        img = request.files["img"]
+        img.save(os.path.join(app.config['UPLOAD_FOLDER'], "{}.png".format(code)))
+
+        #DB 내용 변경
+        cursor.execute("update project set img={code};".format(code=code))
+        conn.commit()
+        conn.close()
+
+        return redirect("/project/settings/{idx}/".format(idx=idx))
+
+@app.route("/api/project/get/img/<idx>/", methods=["GET"])
+def get_project_img(idx):
+    #DB 세팅
+    conn = db.connect()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute("use logg2;")
+
+    #SELECT
+    cursor.execute("select img from project where idx={idx};".format(idx=idx))
+    project = cursor.fetchall()
+
+    #404?
+    if len(project) == 0:
+        return {"status": 404}
+    else:
+        img = project[0]["img"]
+        return send_file("./file/{img}.png".format(img=img), mimetype="image/png")
+
 
 ## 기타 ##
 @app.route("/template/")

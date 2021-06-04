@@ -33,8 +33,17 @@ nav {
 /* article */
 article {
     display: inline-block;
-    width: 100%;
+    width: auto;
 }
 .menu {
     margin-bottom: 2vh;
+}
+
+/* 프로필 이미지 */
+#imgDiv {
+    margin-left: 3vw;
+}
+#img {
+    width: 200px;
+    border-radius: 100%;
 }

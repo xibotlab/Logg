@@ -1,3 +1,5 @@
 hidden.json
-*.js
 __pycache__
+
+file/*
+!file/.gitkeep
