@@ -24,10 +24,9 @@ category.select(0);
 document.getElementById("name").addEventListener("change", () => {
     const name = document.getElementById("name").value;
 
-    fetch("/api/project/update/name/", {
+    fetch(`/api/project/update/name/${idx}/`, {
         method: "POST",
         body: JSON.stringify({
-            idx: idx,
             name: name
         })
     })
@@ -36,10 +35,9 @@ document.getElementById("name").addEventListener("change", () => {
 document.getElementById("desc").addEventListener("change", () => {
     const desc = document.getElementById("desc").value;
 
-    fetch("/api/project/update/desc/", {
+    fetch(`/api/project/update/desc/${idx}/`, {
         method: "POST",
         body: JSON.stringify({
-            idx: idx,
             desc: desc
         })
     })

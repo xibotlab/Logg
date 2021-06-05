@@ -157,11 +157,10 @@ def api_new():
 
     return {"status": project.new(name, desc, session["loggUserId"])}
 
-@app.route("/api/project/update/name/", methods=["POST"])
-def update_project_name():
+@app.route("/api/project/update/name/<idx>/", methods=["POST"])
+def update_project_name(idx):
     #get BODY
     body = json.loads(request.data.decode())
-    idx = body["idx"]
     name = body["name"]
 
     result = project.update(idx, "name", name)
@@ -170,11 +169,10 @@ def update_project_name():
     elif result == 404:
         return {"status": 404}
 
-@app.route("/api/project/update/desc/", methods=["POST"])
-def update_project_desc():
+@app.route("/api/project/update/desc/<idx>/", methods=["POST"])
+def update_project_desc(idx):
     #BODY 가져오기
     body = json.loads(request.data.decode())
-    idx = body["idx"]
     desc = body["desc"]
 
     result = project.update(idx, "description", desc)
