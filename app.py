@@ -72,7 +72,7 @@ def projectPage(idx):
         return render_template("/project/index.html", idx=idx, name=project[0]["name"])
 
 #project settings
-SettingMenu = ["기본정보", "개인정보"]
+SettingMenu = ["기본정보", "트리"]
 @app.route("/project/settings/<idx>/")
 def project_settings(idx):
     cursor = db.connect().cursor(pymysql.cursors.DictCursor)
@@ -172,7 +172,7 @@ def update_project_name(idx):
 @app.route("/api/project/update/desc/<idx>/", methods=["POST"])
 def update_project_desc(idx):
     #BODY 가져오기
-    body = json.loads(request.data.decode())
+
     desc = body["desc"]
 
     result = project.update(idx, "description", desc)
@@ -227,6 +227,23 @@ def get_project_img(idx):
     else:
         img = project[0]["img"]
         return send_file("./file/{img}.png".format(img=img), mimetype="image/png")
+
+@app.route("/api/project/new/tree/<idx>/", methods=["POST"])
+def new_tree(idx):
+    #DB 세팅
+    conn = db.connect()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute("use logg2;")
+
+    #BODY 가져오기
+    body = json.loads(request.data.decode())
+    name = body["name"]
+
+    cursor.execute("insert into tree (name, projectid) values ('{name}', '{projectid}');".format(name=name, projectid=idx))
+    conn.commit()
+    conn.close()
+
+    return {"status": 200}
 
 
 ## 기타 ##

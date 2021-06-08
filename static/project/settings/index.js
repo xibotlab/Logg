@@ -1,5 +1,6 @@
 const idx = Number(document.getElementById("param")?.dataset.idx);
 
+//카테고리 관련 코드
 const category = {
     category: eval(document.getElementById("param").dataset.category),
     select: (id) => {
@@ -20,25 +21,35 @@ for (let i=0; i<category.category.length; i++) {
 }
 category.select(0);
 
-// 메인 페이지 변경 이벤트
-document.getElementById("name").addEventListener("change", () => {
-    const name = document.getElementById("name").value;
+// // 메인 페이지 변경 이벤트
+// function UpdateEvent({url, id, value}) {
 
+// }
+
+document.getElementById("name").addEventListener("change", () => {
     fetch(`/api/project/update/name/${idx}/`, {
         method: "POST",
         body: JSON.stringify({
-            name: name
+            name: document.getElementById("name").value
         })
     })
 })
 
 document.getElementById("desc").addEventListener("change", () => {
-    const desc = document.getElementById("desc").value;
-
     fetch(`/api/project/update/desc/${idx}/`, {
         method: "POST",
         body: JSON.stringify({
-            desc: desc
+            desc: document.getElementById("desc").value
         })
     })
 })
+
+//트리 생성
+function newTree() {
+    fetch(`/api/project/new/tree/${idx}/`, {
+        method: "POST",
+        body: JSON.stringify({
+            name: document.getElementById("newTreeName").value
+        })
+    })
+}

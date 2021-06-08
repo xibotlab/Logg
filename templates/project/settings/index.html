@@ -29,7 +29,8 @@
         </div>
 
         <div id="page1" hidden>
-            미완성
+            <!-- <warning>트리 교체..!</warning> -->
+            <input type="text" id="newTreeName"><button onclick="newTree()">트리 만들기</button>
         </div>
     </article>
 
@@ -40,5 +41,5 @@
         <input type="submit" id="imgSubmit" hidden>
     </form>
 </body> 
-<script src="(( url_for('static', filename='/project/settings/index.js') ))" type="module"></script>
+<script src="(( url_for('static', filename='/project/settings/index.js') ))"></script>
 (% endblock %)
