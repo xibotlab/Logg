@@ -13,6 +13,8 @@ with open("hidden.json", "r") as f:
 #인스턴스 생성
 account = api.account()
 project = api.project()
+projectGet = api.project.get()
+
 db = api.db()
 dbaccount = api.db.account()
 
@@ -244,6 +246,10 @@ def new_tree(idx):
     conn.close()
 
     return {"status": 200}
+
+@app.route("/api/project/get/tree/<idx>/", methods=["GET"])
+def get_tree(idx):
+    return json.dumps(projectGet.tree(idx)), 200
 
 
 ## 기타 ##

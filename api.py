@@ -112,3 +112,12 @@ class project():
         except:
             return 404
         
+    class get():
+        def __init__(self):
+            self.conn = db.connect()
+            self.cursor = self.conn.cursor(pymysql.cursors.DictCursor)
+            self.cursor.execute("use logg2;")
+        
+        def tree(self, idx):
+            self.cursor.execute("select * from tree where projectid={project};".format(project=idx))
+            return self.cursor.fetchall()
